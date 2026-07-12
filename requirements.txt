@@ -1,9 +1,9 @@
-groq
-duckduckgo-search
-speechrecognition
-pyttsx3
 flask
 requests
+groq
+speechrecognition
+pyttsx3
+ddgs
+python-dotenv
 fastapi
 uvicorn
-python-dotenv
