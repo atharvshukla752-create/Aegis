@@ -1,0 +1,6 @@
+groq
+duckduckgo-search
+speechrecognition
+pyttsx3
+flask
+requests

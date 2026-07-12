@@ -1,0 +1,7 @@
+.env
+*.pth
+backups/
+__pycache__/
+data/
+aegis_memory.json
+owner_face/

@@ -1,0 +1,30 @@
+{
+  "ui_html.py": {
+    "hash": "0dd3bf6e89604a81f93306031a4e243bac027d07988402df71f9a8202b61b55e",
+    "role": "Visual layer \u2014 CSS, animations, buttons, layout, dark mode, colors, fonts, icons"
+  },
+  "ui_api.py": {
+    "hash": "f8fb1b4b2bf0bfe55195350c2de394779c5f6b0c4e3323e61d5a2419afac59b5",
+    "role": "Message handling, voice toggle, lesson learning, self-modification pipeline"
+  },
+  "core/brain.py": {
+    "hash": "6494cddb708508e9018020b7a5ffc7fb59341e5471054d478b3f0bd70ebfb9a0",
+    "role": "Groq API calls, system prompt construction, model behavior/personality"
+  },
+  "core/voice.py": {
+    "hash": "d9272aa501b6adfac1b439b4e5d9767fa92b7222ef21857791fb1e91158ed95d",
+    "role": "Text-to-speech, voice synthesis"
+  },
+  "core/modifier.py": {
+    "hash": "7321b1fa50b63be647f64ac2c7429aacb1bc484001e5637db19d3d89fcc019db",
+    "role": "File read/write/backup operations, safety checks for self-editing"
+  },
+  "memory.py": {
+    "hash": "ca94043cdf7b33a91e85263c53ade9c40ec775738957f48817baef61459c57ef",
+    "role": "Conversation history, lessons, facts storage"
+  },
+  "search.py": {
+    "hash": "b283fc53448a4d1f253fdd281983a253d4636d1315e4e12297fa36c45d651a79",
+    "role": "Web search functionality"
+  }
+}
