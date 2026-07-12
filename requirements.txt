@@ -4,3 +4,5 @@ speechrecognition
 pyttsx3
 flask
 requests
+fastapi
+uvicorn
