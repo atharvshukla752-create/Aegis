@@ -41,10 +41,17 @@
   }
 
   .brand { display: flex; align-items: center; gap: 10px; padding: 4px 6px 20px 6px; }
-  .brand .mark { position: relative; width: 30px; height: 30px; flex-shrink: 0; }
-  .brand .mark svg { width: 100%; height: 100%; }
-  .brand .mark .sweep { transform-origin: 15px 15px; animation: sweep 3.5s linear infinite; }
-  @keyframes sweep { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  .brand .mark {
+    position: relative; width: 30px; height: 30px; flex-shrink: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #ffd88a 0%, #e3a24d 35%, #8a5a1e 75%, #3a2408 100%);
+    box-shadow: 0 0 10px rgba(227, 162, 77, 0.45), inset -3px -3px 6px rgba(0,0,0,0.35);
+    animation: orb-pulse 3.2s ease-in-out infinite;
+  }
+  @keyframes orb-pulse {
+    0%, 100% { box-shadow: 0 0 10px rgba(227, 162, 77, 0.45), inset -3px -3px 6px rgba(0,0,0,0.35); transform: scale(1); }
+    50% { box-shadow: 0 0 18px rgba(227, 162, 77, 0.75), inset -3px -3px 6px rgba(0,0,0,0.35); transform: scale(1.06); }
+  }
 
   .brand .name { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 600; letter-spacing: 0.01em; }
   .brand .name .web {
@@ -95,8 +102,12 @@
     height: 100%; display: flex; flex-direction: column; align-items: center;
     justify-content: center; text-align: center; padding-top: 15vh;
   }
-  .empty-state .mark-lg { width: 56px; height: 56px; margin-bottom: 18px; }
-  .empty-state .mark-lg .sweep { transform-origin: 28px 28px; animation: sweep 3.5s linear infinite; }
+  .empty-state .mark-lg {
+    width: 56px; height: 56px; margin-bottom: 18px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #ffd88a 0%, #e3a24d 35%, #8a5a1e 75%, #3a2408 100%);
+    box-shadow: 0 0 22px rgba(227, 162, 77, 0.5), inset -6px -6px 10px rgba(0,0,0,0.35);
+    animation: orb-pulse 3.2s ease-in-out infinite;
+  }
   .empty-state h1 { font-family: 'Fraunces', serif; font-weight: 500; font-size: 24px; margin: 0 0 6px 0; }
   .empty-state p { color: var(--text-dim); font-size: 14px; margin: 0; max-width: 340px; }
 
@@ -109,7 +120,11 @@
     font-size: 12px; font-weight: 600; margin-top: 2px;
   }
   .msg.user .avatar { background: var(--panel-2); color: var(--text-dim); }
-  .msg.aegis .avatar { background: rgba(227, 162, 77, 0.12); color: var(--amber); }
+  .msg.aegis .avatar {
+    background: radial-gradient(circle at 35% 30%, #ffd88a 0%, #e3a24d 40%, #8a5a1e 80%, #3a2408 100%);
+    color: transparent;
+    box-shadow: 0 0 6px rgba(227, 162, 77, 0.4);
+  }
 
   .msg .bubble { font-size: 14.5px; line-height: 1.65; padding-top: 2px; white-space: pre-wrap; }
   .msg .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-dim); margin-bottom: 4px; }
@@ -148,21 +163,69 @@
 
   ::-webkit-scrollbar { width: 8px; }
   ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  .menu-btn {
+    display: none;
+    position: fixed;
+    top: 14px;
+    left: 14px;
+    z-index: 20;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--text);
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 15;
+  }
+
+  @media (max-width: 768px) {
+    body { overflow: visible; }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      z-index: 16;
+      transform: translateX(-100%);
+      transition: transform 0.2s ease;
+    }
+
+    .sidebar.open { transform: translateX(0); }
+
+    .menu-btn { display: flex; }
+
+    .sidebar-overlay.open { display: block; }
+
+    .main { width: 100%; }
+
+    .composer-wrap { padding: 12px 14px 16px 14px; }
+    .chat-inner { padding: 0 14px; }
+
+    .empty-state { padding-top: 22vh; }
+  }
 </style>
 </head>
 <body>
 
-<div class="sidebar">
+<button class="menu-btn" id="menuBtn">
+  <svg viewBox="0 0 16 16" fill="none" width="18" height="18"><path d="M2 4h12M2 8h12M2 12h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+</button>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<div class="sidebar" id="sidebar">
   <div class="brand">
-    <span class="mark">
-      <svg viewBox="0 0 30 30" fill="none">
-        <path d="M15 3 L26 8 V16 C26 22 21 26.5 15 28 C9 26.5 4 22 4 16 V8 Z" stroke="#e3a24d" stroke-width="1.6" fill="none" opacity="0.5"/>
-        <g class="sweep">
-          <line x1="15" y1="15" x2="15" y2="5" stroke="#e3a24d" stroke-width="1.6" stroke-linecap="round" opacity="0.9"/>
-        </g>
-        <circle cx="15" cy="15" r="1.8" fill="#e3a24d"/>
-      </svg>
-    </span>
+    <span class="mark"></span>
     <span class="name">Aegis<span class="web">WEB</span></span>
   </div>
 
@@ -184,15 +247,7 @@
   <div class="chat-scroll" id="chatScroll">
     <div class="chat-inner" id="chatInner">
       <div class="empty-state" id="emptyState">
-        <span class="mark-lg">
-          <svg viewBox="0 0 56 56" fill="none">
-            <path d="M28 5 L48 14 V29 C48 40 39 49 28 52 C17 49 8 40 8 29 V14 Z" stroke="#e3a24d" stroke-width="1.6" fill="none" opacity="0.45"/>
-            <g class="sweep">
-              <line x1="28" y1="28" x2="28" y2="10" stroke="#e3a24d" stroke-width="1.8" stroke-linecap="round" opacity="0.9"/>
-            </g>
-            <circle cx="28" cy="28" r="3" fill="#e3a24d"/>
-          </svg>
-        </span>
+        <span class="mark-lg"></span>
         <h1>What are we working on?</h1>
         <p>Ask a question, request some code, or just talk. AegisWeb keeps the conversation going wherever you are.</p>
       </div>
@@ -236,7 +291,15 @@ function renderHistory() {
     const item = document.createElement('div');
     item.className = 'history-item' + (s.id === activeSessionId ? ' active' : '');
     item.textContent = s.title;
-    item.onclick = () => { activeSessionId = s.id; renderHistory(); renderChat(); };
+    item.onclick = () => {
+      activeSessionId = s.id;
+      renderHistory();
+      renderChat();
+      if (window.innerWidth <= 768) {
+        document.getElementById('sidebar').classList.remove('open');
+        document.getElementById('sidebarOverlay').classList.remove('open');
+      }
+    };
     list.appendChild(item);
   });
 }
@@ -358,6 +421,26 @@ async function checkConnection() {
     label.textContent = 'Offline';
   }
 }
+
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('sidebarOverlay');
+
+function closeSidebar() {
+  sidebar.classList.remove('open');
+  overlay.classList.remove('open');
+}
+
+document.getElementById('menuBtn').addEventListener('click', () => {
+  sidebar.classList.toggle('open');
+  overlay.classList.toggle('open');
+});
+overlay.addEventListener('click', closeSidebar);
+
+// Auto-close the slide-out sidebar on mobile once a chat is picked/started,
+// so you land on the conversation instead of the menu.
+const isMobile = () => window.innerWidth <= 768;
+const _origHistoryClick = renderHistory;
+document.getElementById('newChatBtn').addEventListener('click', () => { if (isMobile()) closeSidebar(); });
 
 checkConnection();
 setInterval(checkConnection, 15000);
